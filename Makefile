@@ -1,5 +1,5 @@
 # List of supported React hooks
-HOOKS := useState useEffect useCallback useMemo useReducer useRef useContext useTransition useDeferredValue
+HOOKS := useState useEffect useCallback useMemo useReducer useRef useContext useTransition useDeferredValue use errorBoundaries suspense
 
 # Declare these as phony targets (i.e., not real files)
 .PHONY: $(HOOKS) empty list
