@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import './App.css';
 
-// TODO: Import React.lazy and Suspense
-// import { Suspense, lazy } from 'react';
+// TODO: Import Suspense, lazy, and use from React
+// import { Suspense, lazy, use } from 'react';
 
 // TODO: Use React.lazy to import these components
 import ImageDetails from './ImageDetails';
@@ -54,31 +54,15 @@ const images = [
   }
 ];
 
-// TODO: Create a suspense-compatible image loader
-// This function should wrap a promise and return an object with a read() method
-function wrapPromise(promise) {
+// TODO: Implement this function to load an image and return a promise
+function loadImage(src) {
   // Your implementation here
 }
 
-// TODO: Create an image resource that uses the wrapPromise pattern
-// const createImageResource = (imageUrl) => {
-//   const promise = new Promise((resolve) => {
-//     const img = new Image();
-//     img.src = imageUrl;
-//     img.onload = () => {
-//       setTimeout(() => {
-//         resolve(imageUrl);
-//       }, 1000 * Math.random()); // Random delay to simulate network variability
-//     };
-//   });
-//
-//   return wrapPromise(promise);
-// };
-
-// Image component that doesn't use Suspense yet
-function Image({ image }) {
+// Regular Image component without Suspense
+function Image({ image, onClick }) {
   return (
-    <div className="image-card" onClick={() => {}}>
+    <div className="image-card" onClick={onClick}>
       <img src={image.url} alt={image.title} />
       <h3>{image.title}</h3>
       <p>By {image.photographer}</p>
@@ -86,19 +70,47 @@ function Image({ image }) {
   );
 }
 
-// TODO: Create a SuspenseImage component that uses the image resource
-// function SuspenseImage({ image }) {
-//   const imageResource = createImageResource(image.url);
-//   const src = imageResource.read();
-//
-//   return (
-//     <div className="image-card" onClick={() => {}}>
-//       <img src={src} alt={image.title} />
-//       <h3>{image.title}</h3>
-//       <p>By {image.photographer}</p>
-//     </div>
-//   );
+// TODO: Create a SuspenseImage component that uses the use hook with loadImage
+// function SuspenseImage({ image, onClick }) {
+//   // Your implementation here
 // }
+
+// Fallback UI for image loading
+function ImageSkeleton() {
+  return (
+    <div className="image-skeleton">
+      <div className="image-skeleton-img"></div>
+      <div className="image-skeleton-title"></div>
+      <div className="image-skeleton-text"></div>
+    </div>
+  );
+}
+
+// Fallback UI for filters loading
+function FiltersSkeleton() {
+  return (
+    <div className="loading-fallback">
+      <div className="loading-spinner"></div>
+      <h3>Loading Filters</h3>
+      <p>Please wait while we load the search filters...</p>
+    </div>
+  );
+}
+
+// Fallback UI for image details loading
+function DetailsSkeleton() {
+  return (
+    <div className="image-details-overlay">
+      <div className="image-details">
+        <div className="loading-fallback">
+          <div className="loading-spinner"></div>
+          <h3>Loading Image Details</h3>
+          <p>Please wait while we load the detailed information...</p>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 // Main App component
 function App() {
@@ -118,22 +130,28 @@ function App() {
         </button>
       </header>
       
-      {/* TODO: Wrap with Suspense */}
+      {/* TODO: Wrap SearchFilters with Suspense */}
       {showFilters && <SearchFilters />}
       
       <main>
         {/* TODO: Implement nested Suspense boundaries for the gallery */}
         <div className="image-gallery">
           {images.map(image => (
-            <div key={image.id} onClick={() => handleImageClick(image)}>
-              {/* TODO: Replace with SuspenseImage */}
-              <Image image={image} />
-            </div>
+            <Image 
+              key={image.id}
+              image={image} 
+              onClick={() => handleImageClick(image)} 
+            />
           ))}
         </div>
         
-        {/* TODO: Wrap with Suspense */}
-        {selectedImage && <ImageDetails image={selectedImage} onClose={() => setSelectedImage(null)} />}
+        {/* TODO: Wrap ImageDetails with Suspense */}
+        {selectedImage && (
+          <ImageDetails 
+            image={selectedImage} 
+            onClose={() => setSelectedImage(null)} 
+          />
+        )}
       </main>
     </div>
   );

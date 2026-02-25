@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useState } from 'react';
+import React, { Suspense, lazy, useState, use } from 'react';
 import './App.css';
 
 // Use React.lazy to lazy-load components
@@ -51,53 +51,22 @@ const images = [
   }
 ];
 
-// Suspense-compatible data fetching utility
-function wrapPromise(promise) {
-  let status = 'pending';
-  let result;
-  let suspender = promise.then(
-    r => {
-      status = 'success';
-      result = r;
-    },
-    e => {
-      status = 'error';
-      result = e;
-    }
-  );
-
-  return {
-    read() {
-      if (status === 'pending') {
-        throw suspender;
-      } else if (status === 'error') {
-        throw result;
-      } else if (status === 'success') {
-        return result;
-      }
-    }
-  };
-}
-
-// Create an image resource that uses the wrapPromise pattern
-const createImageResource = (imageUrl) => {
-  const promise = new Promise((resolve) => {
+// Simple function to load an image and return a promise
+function loadImage(src) {
+  return new Promise((resolve) => {
     const img = new Image();
-    img.src = imageUrl;
+    img.src = src;
     img.onload = () => {
-      setTimeout(() => {
-        resolve(imageUrl);
-      }, 1000 * Math.random()); // Random delay to simulate network variability
+      // Add a small delay to demonstrate loading state
+      setTimeout(() => resolve(src), 1000);
     };
   });
+}
 
-  return wrapPromise(promise);
-};
-
-// Image component that uses Suspense for loading
+// Image component that uses Suspense
 function SuspenseImage({ image, onClick }) {
-  const imageResource = createImageResource(image.url);
-  const src = imageResource.read();
+  // The use hook will suspend while the promise is pending
+  const src = use(loadImage(image.url));
 
   return (
     <div className="image-card" onClick={onClick}>

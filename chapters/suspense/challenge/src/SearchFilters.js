@@ -1,29 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+
+// TODO: Import the use hook from React
+// import { use } from 'react';
+
+// TODO: Implement this function to fetch categories and return a promise
+function fetchCategories() {
+  // Your implementation here
+  // Should return a promise that resolves with an array of categories:
+  // [
+  //   { id: 'nature', name: 'Nature' },
+  //   { id: 'architecture', name: 'Architecture' },
+  //   ...etc
+  // ]
+}
 
 // This component provides filtering options for the image gallery
-// It will be lazy-loaded in the completed solution
 function SearchFilters() {
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // TODO: Use the use hook with fetchCategories to get the category list
+  // const categories = ...
+  
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
-  
-  useEffect(() => {
-    // Simulate fetching categories from an API
-    const timer = setTimeout(() => {
-      setCategories([
-        { id: 'nature', name: 'Nature' },
-        { id: 'architecture', name: 'Architecture' },
-        { id: 'travel', name: 'Travel' },
-        { id: 'animals', name: 'Animals' },
-        { id: 'people', name: 'People' },
-        { id: 'food', name: 'Food & Drink' }
-      ]);
-      setLoading(false);
-    }, 1500);
-    
-    return () => clearTimeout(timer);
-  }, []);
   
   return (
     <div className="search-filters">
@@ -42,22 +39,15 @@ function SearchFilters() {
       
       <div className="filter-section">
         <label htmlFor="category">Category:</label>
-        {loading ? (
-          <div className="loading-categories">Loading categories...</div>
-        ) : (
-          <select
-            id="category"
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-          >
-            <option value="all">All Categories</option>
-            {categories.map(category => (
-              <option key={category.id} value={category.id}>
-                {category.name}
-              </option>
-            ))}
-          </select>
-        )}
+        <select
+          id="category"
+          value={selectedCategory}
+          onChange={(e) => setSelectedCategory(e.target.value)}
+        >
+          <option value="all">All Categories</option>
+          {/* TODO: Replace this with mapped categories from use hook */}
+          <option value="loading">Loading categories...</option>
+        </select>
       </div>
       
       <div className="filter-section">

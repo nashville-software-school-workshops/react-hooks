@@ -1,36 +1,8 @@
-import React, { useState } from 'react';
+import { useState, use } from 'react';
 
-// Suspense-compatible data fetching utility (same as in App.js)
-function wrapPromise(promise) {
-  let status = 'pending';
-  let result;
-  let suspender = promise.then(
-    r => {
-      status = 'success';
-      result = r;
-    },
-    e => {
-      status = 'error';
-      result = e;
-    }
-  );
-
-  return {
-    read() {
-      if (status === 'pending') {
-        throw suspender;
-      } else if (status === 'error') {
-        throw result;
-      } else if (status === 'success') {
-        return result;
-      }
-    }
-  };
-}
-
-// Create a resource for fetching categories
-const categoriesResource = wrapPromise(
-  new Promise((resolve) => {
+// Simple function to fetch categories
+function fetchCategories() {
+  return new Promise((resolve) => {
     // Simulate API call to fetch categories
     setTimeout(() => {
       resolve([
@@ -42,14 +14,13 @@ const categoriesResource = wrapPromise(
         { id: 'food', name: 'Food & Drink' }
       ]);
     }, 1500);
-  })
-);
+  });
+}
 
 // This component provides filtering options for the image gallery
-// It uses Suspense for data fetching
 function SearchFilters() {
-  // Read from the categories resource
-  const categories = categoriesResource.read();
+  // Use the hook directly with the promise
+  const categories = use(fetchCategories());
   
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
