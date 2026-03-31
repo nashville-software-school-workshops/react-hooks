@@ -27,6 +27,7 @@ export default function App() {
     return output
   }
 
+  console.log("render");
   const expensiveValue = doCalculation();
 
   return (
