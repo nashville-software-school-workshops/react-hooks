@@ -1,37 +1,21 @@
-import { useForm } from './useForm';
+import { useTimer } from './useTimer';
 
 export default function App() {
+  const { seconds, isRunning, startTimer, stopTimer, resetTimer } = useTimer();
 
-  const { values, handleChange, handleSubmit, reset } = useForm({
-    username: '',
-    email: ''
-  });
+  const formatTime = (totalSeconds) => {
+    const mins = Math.floor(totalSeconds / 60);
+    const secs = totalSeconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="username">Username:</label>
-        <input
-          type="text"
-          id="username"
-          name="username"
-          value={values.username}
-          onChange={handleChange}
-        />
-      </div>
-      <div>
-        <label htmlFor="email">Email:</label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          value={values.email}
-          onChange={handleChange}
-        />
-      </div>
-      <button type="submit">Submit</button>
-      <button type="button" onClick={reset}>Reset</button>
-    </form>
+    <div>
+      <h1>Timer</h1>
+      <p>{formatTime(seconds)}</p>
+      <button onClick={startTimer} disabled={isRunning}>Start</button>
+      <button onClick={stopTimer} disabled={!isRunning}>Stop</button>
+      <button onClick={resetTimer}>Reset</button>
+    </div>
   );
-  
 }

@@ -1,7 +1,7 @@
 import { useTimer } from './useTimer';
 
 export default function App() {
-  const { seconds, isRunning, start, stop, reset } = useTimer();
+  const { seconds, isRunning, startTimer, stopTimer, resetTimer } = useTimer();
 
   const formatTime = (totalSeconds) => {
     const mins = Math.floor(totalSeconds / 60);
@@ -13,9 +13,9 @@ export default function App() {
     <div>
       <h1>Timer</h1>
       <p>{formatTime(seconds)}</p>
-      <button onClick={start} disabled={isRunning}>Start</button>
-      <button onClick={stop} disabled={!isRunning}>Stop</button>
-      <button onClick={reset}>Reset</button>
+      <button onClick={startTimer} disabled={isRunning}>Start</button>
+      <button onClick={stopTimer} disabled={!isRunning}>Stop</button>
+      <button onClick={resetTimer}>Reset</button>
     </div>
   );
 }
