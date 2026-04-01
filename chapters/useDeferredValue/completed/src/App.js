@@ -52,7 +52,6 @@ function SlowList({ searchQuery }) {
 
 function App() {
   const [searchQuery, setSearchQuery] = useState('')
-  const [showDeferred, setShowDeferred] = useState(true)
   
   // Create deferred value for search query
   const deferredQuery = useDeferredValue(searchQuery)
@@ -61,39 +60,10 @@ function App() {
     setSearchQuery(e.target.value)
   }
 
-  const toggleMode = () => {
-    setShowDeferred(prev => !prev)
-  }
-
   return (
     <div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
       <h1>useDeferredValue Demo</h1>
 
-      <div style={{ marginBottom: '2rem' }}>
-        <h3>Understanding useDeferredValue in this example:</h3>
-        <ul>
-          <li>Type in the search box and notice the difference between modes</li>
-          <li>Deferred mode keeps the UI responsive during heavy filtering</li>
-          <li>Non-deferred mode might feel sluggish during typing</li>
-          <li>The list updates are deferred to avoid blocking the input</li>
-        </ul>
-      </div>
-
-      <div style={{ marginBottom: '20px' }}>
-        <button 
-          onClick={toggleMode}
-          style={{
-            padding: '8px 16px',
-            backgroundColor: showDeferred ? '#28a745' : '#dc3545',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer'
-          }}
-        >
-          {showDeferred ? 'Using Deferred Value' : 'Not Using Deferred Value'}
-        </button>
-      </div>
 
       <div style={{ marginBottom: '20px' }}>
         <input
@@ -114,17 +84,15 @@ function App() {
       <div style={{ marginBottom: '20px' }}>
         <p>
           Search query: {searchQuery}
-          {showDeferred && (
-            <>
+          
               <br />
               Deferred query: {deferredQuery}
               {deferredQuery !== searchQuery && ' (updating...)'}
-            </>
-          )}
+            
         </p>
       </div>
 
-      <SlowList searchQuery={showDeferred ? deferredQuery : searchQuery} />
+      <SlowList searchQuery={ deferredQuery } />
 
       <div style={{ marginTop: '20px' }}>
         <p style={{ fontStyle: 'italic' }}>
