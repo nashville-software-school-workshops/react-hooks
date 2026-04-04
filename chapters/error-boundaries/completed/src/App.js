@@ -18,15 +18,13 @@ export default function App() {
 
       <div className="section">
         <h2>Items:</h2>
-        
-        {/* 
-        TODO: Wrap this component in an ErrorBoundary component with 3 props:
-          FallbackComponent: the ErrorFallback that we import
-          resetKeys: an array containing just items
-          onReset: an anonymous function to set items to workingItems
-        */}
-
+        <ErrorBoundary 
+          FallbackComponent={ErrorFallback} 
+          resetKeys={[items]}
+          onReset={() => setItems(workingItems)}
+        >
           <ItemList items={items} />
+        </ErrorBoundary>
       </div>
 
       <div className="section">

@@ -18,15 +18,16 @@ export default function App() {
 
       <div className="section">
         <h2>Items:</h2>
-        
+
         {/* 
         TODO: Wrap this component in an ErrorBoundary component with 3 props:
           FallbackComponent: the ErrorFallback that we import
           resetKeys: an array containing just items
           onReset: an anonymous function to set items to workingItems
         */}
-
           <ItemList items={items} />
+
+          
       </div>
 
       <div className="section">
