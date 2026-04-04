@@ -1,12 +1,20 @@
-import './App.css';
 
 // TODO: Import Suspense and lazy from React
+import PostCard from './PostCard';
+import UserCard from './UserCard';
+import './App.css';
 
-// TODO: Create lazy-loaded components using React.lazy()
-// Example: const LazyUserCard = lazy(() => import('./UserCard'));
+// TODO: Import lazy-loaded components using React.lazy() instead of importing them above
+// Example: const LazyComponent = lazy(() => import('./Component'));
 
-// TODO: Create a LoadingSpinner component
-// Show a simple loading message while components are being loaded
+// Loading spinner component
+function LoadingSpinner() {
+  return (
+    <div className="loading-spinner">
+      <p>Loading...</p>
+    </div>
+  );
+}
 
 export default function App() {
   return (
@@ -17,14 +25,10 @@ export default function App() {
         <h2>Lazy-Loaded Components</h2>
         <p>These components below are lazy-loaded. Look for the loading state while they're downloading.</p>
 
-        {/* TODO: Wrap lazy components with Suspense boundary and fallback */}
-        {/*
-        <Suspense fallback={<LoadingSpinner />}>
-          <LazyUserCard name="Alice" title="Developer" />
-          <LazyUserCard name="Bob" title="Designer" />
-          <LazyUserCard name="Carol" title="Manager" />
-        </Suspense>
-        */}
+        {/* TODO: replace these with lazy loaded versions and wrap with Suspense component and LoadingSpinner as the fallback */}
+        <UserCard name="Alice" title="Developer" />
+        <UserCard name="Bob" title="Designer" />
+        <UserCard name="Carol" title="Manager" />
       </div>
 
       <div className="section">
@@ -41,12 +45,9 @@ export default function App() {
         <h2>Another Suspense Boundary</h2>
         <p>You can have multiple Suspense boundaries for different parts of the page.</p>
 
-        {/* TODO: Add another Suspense boundary with different components */}
-        {/*
-        <Suspense fallback={<LoadingSpinner />}>
-          <LazyPostCard title="First Post" />
-        </Suspense>
-        */}
+        {/* TODO: Use lazy loaded components and wrap them in Suspense */}
+        <PostCard title="First Post" excerpt="This is the first post excerpt" />
+        <PostCard title="Second Post" excerpt="This is the second post excerpt" />
       </div>
     </div>
   );

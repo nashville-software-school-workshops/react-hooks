@@ -17,11 +17,11 @@ function wrapPromise(promise) {
   return {
     read() {
       if (status === "pending") {
-        throw suspend;
+        throw suspend; // throw a promise, which will tell suspense to show the fallback
       } else if (status === "error") {
-        throw result;
+        throw result; // throw an error, which can be handled by an ErrorBoundary
       } else if (status === "success") {
-        return result;
+        return result; // return the actual data, which will be used in rendering the component
       }
     }
   };

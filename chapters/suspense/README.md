@@ -18,21 +18,23 @@ When a component inside a Suspense boundary throws a promise (which Suspense-com
 
 **Explanation of the Example:**
 
-In this example, we use `React.lazy()` to code-split a component, wrapping it in a Suspense boundary. The fallback UI (loading message) is displayed while the component is being downloaded. Once loaded, the actual component renders. This pattern works with any Suspense-compatible data fetching solution.
+In this example, we fetch data from an API and use a promise wrapper to make it Suspense-compatible. The `wrapPromise()` function tracks the promise state (pending, success, error) and throws the promise to Suspense while it's loading. This causes the fallback UI to display until the data arrives. Once the promise resolves, the component can call `read()` again to get the actual data. Notice how other page content loads immediately while the API request is pending—that's the power of Suspense.
 
 ## When to Use
 
+*   **Data Fetching:** Use Suspense with data fetching libraries or custom promise wrappers to manage loading states declaratively instead of using useState for loading flags.
 *   **Code Splitting:** Use Suspense with `React.lazy()` to load components on-demand, reducing initial bundle size.
-*   **Data Fetching:** Use with Suspense-compatible data fetching libraries (like those using the Resource API pattern) to manage loading states declaratively.
-*   **Progressive Loading:** Use Suspense to provide a better UX by showing loading indicators while async operations complete.
-*   **Better Than Loading State:** Eliminates the need to manually manage loading, error, and success states throughout your component tree.
+*   **Progressive Loading:** Use Suspense to provide a better UX by showing loading indicators while async operations complete, without blocking other page content.
+*   **Cleaner Component Logic:** Eliminates the need to manually manage loading, error, and success states throughout your component tree.
 
 ## Important Notes
 
-- Suspense works with code splitting (`React.lazy()`) and is framework-agnostic for data fetching
-- Traditional data fetching with `useEffect` and `fetch()` does not support Suspense yet in React 18
+- For data fetching, you need a Suspense-compatible solution like a promise wrapper, TanStack Query with Suspense, or React 19's `use()` hook
+- Traditional data fetching with `useEffect` and `fetch()` does not support Suspense—it requires a library or custom wrapper
+- The `wrapPromise()` pattern shown in the example is how you make a promise Suspense-compatible by throwing the promise until it resolves
 - Error Boundaries work well alongside Suspense to handle errors in suspended components
 - Multiple components can suspend together and share the same fallback UI
+- Code splitting with `React.lazy()` is another powerful use case for Suspense
 
 ## Common Patterns
 
