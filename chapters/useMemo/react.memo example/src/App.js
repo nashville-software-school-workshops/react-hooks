@@ -2,21 +2,23 @@ import React, { useState } from "react";
 
 
 function ExpensiveChild({ number }) {
+  console.log("ExpensiveChild rendered");
+
   // Simulate expensive work
   const start = performance.now();
   while (performance.now() - start < 1000) {} // 50ms block
 
-  console.log("ExpensiveChild renders");
   return <div>Number: {number}</div>;
 }
 
 
 
 const ExpensiveChildMemoized = React.memo(function ExpensiveChild({ number }) {
+  console.log("ExpensiveChild rendered");
+
   const start = performance.now();
   while (performance.now() - start < 1000) {}
 
-  console.log("ExpensiveChildMemoized renders");
   return <div>Number: {number}</div>;
 });
 
@@ -37,7 +39,7 @@ export default function App() {
         placeholder="Type here"
       />
 
-      <ExpensiveChild number={count} />
+      <ExpensiveChildMemoized number={count} />
     </div>
   );
 }
