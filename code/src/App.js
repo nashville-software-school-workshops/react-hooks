@@ -1,11 +1,9 @@
-
-// TODO: Import Suspense and lazy from React
-import PostCard from './PostCard';
-import UserCard from './UserCard';
+import { Suspense, lazy } from 'react';
 import './App.css';
 
-// TODO: Import lazy-loaded components using React.lazy() instead of importing them above
-// Example: const LazyComponent = lazy(() => import('./Component'));
+// Lazy-load components for code splitting
+const LazyUserCard = lazy(() => import('./UserCard'));
+const LazyPostCard = lazy(() => import('./PostCard'));
 
 // Loading spinner component
 function LoadingSpinner() {
@@ -25,10 +23,11 @@ export default function App() {
         <h2>Lazy-Loaded Components</h2>
         <p>These components below are lazy-loaded. Look for the loading state while they're downloading.</p>
 
-        {/* TODO: replace these with lazy loaded versions and wrap with Suspense component and LoadingSpinner as the fallback */}
-        <UserCard name="Alice" title="Developer" />
-        <UserCard name="Bob" title="Designer" />
-        <UserCard name="Carol" title="Manager" />
+        <Suspense fallback={<LoadingSpinner />}>
+          <LazyUserCard name="Alice" title="Developer" />
+          <LazyUserCard name="Bob" title="Designer" />
+          <LazyUserCard name="Carol" title="Manager" />
+        </Suspense>
       </div>
 
       <div className="section">
@@ -45,9 +44,10 @@ export default function App() {
         <h2>Another Suspense Boundary</h2>
         <p>You can have multiple Suspense boundaries for different parts of the page.</p>
 
-        {/* TODO: Use lazy loaded components and wrap them in Suspense */}
-        <PostCard title="First Post" excerpt="This is the first post excerpt" />
-        <PostCard title="Second Post" excerpt="This is the second post excerpt" />
+        <Suspense fallback={<LoadingSpinner />}>
+          <LazyPostCard title="First Post" excerpt="This is the first post excerpt" />
+          <LazyPostCard title="Second Post" excerpt="This is the second post excerpt" />
+        </Suspense>
       </div>
     </div>
   );
