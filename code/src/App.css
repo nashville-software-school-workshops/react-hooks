@@ -76,3 +76,22 @@
   margin: 0;
   color: #555;
 }
+
+.joke-card {
+  background: #f3e5f5;
+  border-left: 4px solid #9c27b0;
+  padding: 20px;
+  margin: 10px 0;
+  border-radius: 4px;
+}
+
+.joke-card p.punchline {
+  margin: 0 0 10px 0;
+  color: #6a1b9a;
+  letter-spacing: 1px;
+}
+
+.joke-card p.setup {
+  margin: 0 0 15px 0;
+  color: #333;
+}

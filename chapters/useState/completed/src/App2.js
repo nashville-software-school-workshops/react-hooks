@@ -1,6 +1,6 @@
 import './App.css';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import './App.css';
 
 function App() {
@@ -35,7 +35,7 @@ function App() {
           <input
             type="email"
             id="email"
-            value={formData.nam}
+            value={formData.email}
             onChange={e => setFormData({ ...formData, email: e.target.value })}
           />
         </div>
@@ -44,7 +44,7 @@ function App() {
           <input
             type="password"
             id="password"
-            value={formData.nam}
+            value={formData.password}
             onChange={e => setFormData({ ...formData, password: e.target.value })}
           />
         </div>

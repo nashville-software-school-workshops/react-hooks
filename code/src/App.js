@@ -1,9 +1,6 @@
-import { Suspense, lazy } from 'react';
+import { Suspense } from 'react';
 import './App.css';
-
-// Lazy-load components for code splitting
-const LazyUserCard = lazy(() => import('./UserCard'));
-const LazyPostCard = lazy(() => import('./PostCard'));
+import Joke from './Joke';
 
 // Loading spinner component
 function LoadingSpinner() {
@@ -17,37 +14,33 @@ function LoadingSpinner() {
 export default function App() {
   return (
     <div className="app">
-      <h1>Suspense Exercise</h1>
+      <h1>Suspense with Data Fetching</h1>
 
       <div className="section">
-        <h2>Lazy-Loaded Components</h2>
-        <p>These components below are lazy-loaded. Look for the loading state while they're downloading.</p>
+        <h2>Random Joke</h2>
+        <p>The joke below is fetched from an API. Notice how other content loads while waiting for the joke data.</p>
 
         <Suspense fallback={<LoadingSpinner />}>
-          <LazyUserCard name="Alice" title="Developer" />
-          <LazyUserCard name="Bob" title="Designer" />
-          <LazyUserCard name="Carol" title="Manager" />
+          <Joke />
         </Suspense>
       </div>
 
       <div className="section">
-        <h2>Content That Loads Immediately</h2>
-        <p>This section loads right away, not affected by the Suspense boundary above.</p>
+        <h2>Other Page Content</h2>
+        <p>This section loads immediately, not waiting for the joke API to respond.</p>
         <ul>
-          <li>Item 1</li>
-          <li>Item 2</li>
-          <li>Item 3</li>
+          <li>This renders without waiting</li>
+          <li>Suspense only affects components inside the boundary</li>
+          <li>Everything else loads normally</li>
         </ul>
       </div>
 
       <div className="section">
-        <h2>Another Suspense Boundary</h2>
-        <p>You can have multiple Suspense boundaries for different parts of the page.</p>
-
-        <Suspense fallback={<LoadingSpinner />}>
-          <LazyPostCard title="First Post" excerpt="This is the first post excerpt" />
-          <LazyPostCard title="Second Post" excerpt="This is the second post excerpt" />
-        </Suspense>
+        <h2>Why Suspense with Data Fetching?</h2>
+        <p>
+          Suspense provides a cleaner way to handle async data. Instead of managing loading states in each component,
+          you declare what should show while data loads, and Suspense handles the rest.
+        </p>
       </div>
     </div>
   );
