@@ -79,54 +79,37 @@ function UserProfile({ userPromise }) {
   );
 }
 
-// Post List component that conditionally uses the posts promise
-function PostList({ userPromise, isLoggedIn }) {
+// Post List component that uses the posts promise
+function PostList({ postsPromise }) {
   // Use the theme context with the use hook
   const { theme } = use(ThemeContext);
-  
-  // Conditionally use the userPromise and fetch posts
-  let posts = [];
-  
-  if (isLoggedIn) {
-    // This is valid with the use hook (but would not be with useContext or other hooks)
-    const userData = use(userPromise);
-    // Use the user ID to fetch posts
-    posts = use(fetchUserPosts(userData.id));
-  }
-  
+
+  const posts = use(postsPromise);
+
   return (
     <div className={`posts-container ${theme}`}>
       <h2>User Posts</h2>
-      {isLoggedIn ? (
-        <div className="posts-list">
-          {posts.map(post => (
-            <div key={post.id} className="post-item">
-              <h3>{post.title}</h3>
-              <p>{post.content}</p>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <p>Please log in to view posts</p>
-      )}
+      <div className="posts-list">
+        {posts.map(post => (
+          <div key={post.id} className="post-item">
+            <h3>{post.title}</h3>
+            <p>{post.content}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
 
+const userPromise = fetchUserData();
+const postsPromise = userPromise.then(userData => fetchUserPosts(userData.id));
+
 export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [theme, setTheme] = useState('light');
-  
+
   const toggleTheme = () => {
     setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
   };
-  
-  const toggleLogin = () => {
-    setIsLoggedIn(prevState => !prevState);
-  };
-  
-  // Create the user data promise
-  const userPromise = fetchUserData();
   
   // Create the theme context value
   const themeValue = {
@@ -139,20 +122,13 @@ export default function App() {
       <div className={`app-container ${theme}`}>
         <Header />
         
-        <button 
-          onClick={toggleLogin}
-          className={`login-toggle ${theme}`}
-        >
-          {isLoggedIn ? 'Log Out' : 'Log In'}
-        </button>
-        
         <div className="content-container">
           <Suspense fallback={<div className="loading">Loading user data...</div>}>
             <UserProfile userPromise={userPromise} />
           </Suspense>
           
           <Suspense fallback={<div className="loading">Loading posts...</div>}>
-            <PostList userPromise={userPromise} isLoggedIn={isLoggedIn} />
+            <PostList postsPromise={postsPromise} />
           </Suspense>
         </div>
       </div>

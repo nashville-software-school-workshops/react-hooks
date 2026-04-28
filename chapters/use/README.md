@@ -13,7 +13,24 @@ The `use` hook takes one argument:
 
 **Return Value:**
 
-`use` returns the current value of the resource. For a Context, it returns the current context value. For a Promise, it returns the resolved value of the Promise.
+`use` returns the current value of the resource. For a Context, it returns the current context value. For a Promise, it returns the resolved value of the Promise — but only after the Promise has fulfilled. While it is pending, `use` does not block or wait: it **throws the Promise**, which React catches internally. React then renders the nearest `<Suspense>` boundary's fallback in place of the component, and retries rendering the component once the Promise settles.
+
+If the Promise **rejects**, `use` throws the error instead. React looks for the nearest `<ErrorBoundary>` above the component to handle it. Without one, a rejected Promise will crash the component tree.
+
+```javascript
+<ErrorBoundary fallback={<p>Something went wrong.</p>}>
+  <Suspense fallback={<p>Loading...</p>}>
+    <ComponentThatUsesPromise promise={dataPromise} />
+  </Suspense>
+</ErrorBoundary>
+```
+
+In summary:
+- **Pending promise** → throws the Promise → `<Suspense>` fallback renders
+- **Fulfilled promise** → returns the resolved value → component renders normally
+- **Rejected promise** → throws the error → `<ErrorBoundary>` fallback renders
+
+Because `use` throws while a Promise is pending, the Promise passed to it must be **stable** — created outside the component or passed as a prop. Creating a new Promise on every render means `use` throws a new Promise each time, causing the component to suspend indefinitely.
 
 **Explanation of the Example:**
 

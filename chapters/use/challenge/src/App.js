@@ -1,24 +1,50 @@
-import React, { useState, createContext, Suspense } from 'react';
+import React, { useState, createContext, Suspense, use } from 'react';
 import './App.css';
 
-// TODO: Create a theme context
-// const ThemeContext = ...
+// Create a theme context
+const ThemeContext = createContext('light');
 
 // Simulate a data fetching function that returns a Promise for user data
 function fetchUserData() {
-  // TODO: Implement this function to return a Promise that resolves with user data
-  // The Promise should resolve with an object containing id, name, and email
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({
+        id: 1,
+        name: 'John Doe',
+        email: 'john.doe@example.com'
+      });
+    }, 1000);
+  });
 }
 
 // Simulate a data fetching function that returns a Promise for user posts
 function fetchUserPosts(userId) {
-  // TODO: Implement this function to return a Promise that resolves with an array of posts
-  // The Promise should resolve with an array of post objects, each with id, title, and content
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve([
+        {
+          id: 1,
+          title: 'Understanding the use Hook',
+          content: 'The use hook is a powerful new addition to React that allows for more flexible resource consumption...'
+        },
+        {
+          id: 2,
+          title: 'Promises and React',
+          content: 'Working with promises in React components has traditionally required useEffect and state...'
+        },
+        {
+          id: 3,
+          title: 'Conditional Hook Usage',
+          content: 'Unlike traditional hooks, the use hook can be called conditionally, opening up new patterns...'
+        }
+      ]);
+    }, 1500);
+  });
 }
 
 // Header component with theme toggle
 function Header() {
-  // TODO: Use the theme context to get the current theme and toggle function
+  // TODO: with use hook, instead get the current theme and toggle function from the context
   const theme = 'light'; // Replace with context usage
   const toggleTheme = () => {}; // Replace with context usage
   
@@ -37,13 +63,10 @@ function Header() {
 
 // User Profile component that uses the theme context and user data
 function UserProfile({ userPromise }) {
-  // TODO: Use the theme context to get the current theme
-  const theme = 'light'; // Replace with use hook
+  // TODO: With the use hook, get the current theme from context
+  const theme = 'light';
   
-  // TODO: Use the userPromise with the use hook to get the user data
-  // const userData = ...
-  
-  // Placeholder data until you implement the use hook
+  // TODO: Use the userPromise with the use hook to get the user data, instead of this hardcoded data
   const userData = { name: 'Loading...', email: 'loading@example.com' };
   
   return (
@@ -57,15 +80,13 @@ function UserProfile({ userPromise }) {
   );
 }
 
-// Post List component that conditionally uses the posts promise
-function PostList({ userPromise, isLoggedIn }) {
-  // TODO: Use the theme context to get the current theme
+// Post List component that uses the posts promise
+function PostList({ postsPromise }) {
+
+  // TODO: with use hook, get the current theme from that context
   const theme = 'light'; // Replace with use hook
   
-  // TODO: Conditionally use the userPromise to get the user ID
-  // and then fetch and display posts only if the user is logged in
-  
-  // Placeholder data until you implement the use hook
+  // TODO: use the use hook and postsPromise then fetch and display posts, instead of this placeholder data
   const posts = [
     { id: 1, title: 'Loading...', content: 'Loading post content...' }
   ];
@@ -73,58 +94,49 @@ function PostList({ userPromise, isLoggedIn }) {
   return (
     <div className={`posts-container ${theme}`}>
       <h2>User Posts</h2>
-      {isLoggedIn ? (
-        <div className="posts-list">
-          {posts.map(post => (
-            <div key={post.id} className="post-item">
-              <h3>{post.title}</h3>
-              <p>{post.content}</p>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <p>Please log in to view posts</p>
-      )}
+      <div className="posts-list">
+        {posts.map(post => (
+          <div key={post.id} className="post-item">
+            <h3>{post.title}</h3>
+            <p>{post.content}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
 
+const userPromise = fetchUserData();
+const postsPromise = userPromise.then(userData => fetchUserPosts(userData.id));
+
 export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [theme, setTheme] = useState('light');
-  
+
   const toggleTheme = () => {
     setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
   };
-  
-  const toggleLogin = () => {
-    setIsLoggedIn(prevState => !prevState);
+
+  // Create the theme context value
+  const themeValue = {
+    theme,
+    toggleTheme
   };
   
-  // Create the user data promise
-  const userPromise = fetchUserData();
-  
   return (
-    // TODO: Wrap the app with the ThemeContext.Provider
-    <div className={`app-container ${theme}`}>
-      <Header />
-      
-      <button 
-        onClick={toggleLogin}
-        className={`login-toggle ${theme}`}
-      >
-        {isLoggedIn ? 'Log Out' : 'Log In'}
-      </button>
-      
-      <div className="content-container">
-        <Suspense fallback={<div className="loading">Loading user data...</div>}>
-          <UserProfile userPromise={userPromise} />
-        </Suspense>
+    <ThemeContext.Provider value={themeValue}>
+      <div className={`app-container ${theme}`}>
+        <Header />
         
-        <Suspense fallback={<div className="loading">Loading posts...</div>}>
-          <PostList userPromise={userPromise} isLoggedIn={isLoggedIn} />
-        </Suspense>
+        <div className="content-container">
+          <Suspense fallback={<div className="loading">Loading user data...</div>}>
+            <UserProfile userPromise={userPromise} />
+          </Suspense>
+          
+          <Suspense fallback={<div className="loading">Loading posts...</div>}>
+            <PostList postsPromise={postsPromise} />
+          </Suspense>
+        </div>
       </div>
-    </div>
+    </ThemeContext.Provider>
   );
 }

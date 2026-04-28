@@ -50,6 +50,7 @@ export default function App() {
 
   const [username, setUsername] = useState('Alice');
   
+  //this re-runs on render, which re-triggers the load state
   const userPromise = fetchUserData();
 
   return (
