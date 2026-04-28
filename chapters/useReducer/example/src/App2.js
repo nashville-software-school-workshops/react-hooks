@@ -1,4 +1,5 @@
 import { useReducer } from 'react';
+import './App.css';
 
 // Action type constants
 const CART_ACTIONS = {

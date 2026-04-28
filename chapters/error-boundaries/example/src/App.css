@@ -1,0 +1,49 @@
+.app {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.section {
+  margin-bottom: 30px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.component-box {
+  background: #f0f0f0;
+  padding: 15px;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.error-container {
+  background: #ffe0e0;
+  border: 2px solid #ff6b6b;
+  border-radius: 4px;
+  padding: 20px;
+  text-align: center;
+  color: #d32f2f;
+}
+
+.error-container h2 {
+  margin-top: 0;
+  color: #d32f2f;
+}
+
+.error-container button {
+  background: #ff6b6b;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.error-container button:hover {
+  background: #d32f2f;
+}
