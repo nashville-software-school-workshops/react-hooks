@@ -2,9 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import './App.css';
 
 function App() {
-
-  console.log('App rendered');
-
   const [name, setName] = useState("");
   const previousName = useRef("");
   const inputElement = useRef(null);

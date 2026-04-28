@@ -1,22 +1,8 @@
-import { useState, useTransition } from 'react';
+import { useState } from 'react';
 
 export default function App() {
-  const [isPending, startTransition] = useTransition();
   const [input, setInput] = useState('');
   const [output, setOutput] = useState([]);
-
-  const handleChangeWithTransition = (e) => {
-    const value = e.target.value;
-    setInput(value);
-    startTransition( () => {
-      // simulate a slow rendering process
-      const arrayOfData = [];
-      for (let i=0; i<20000; i++){
-        arrayOfData.push(value);
-      }
-      setOutput(arrayOfData);
-    });
-  };
 
   const handleChangeWithoutTransition = (e) => {
     const value = e.target.value;
@@ -31,11 +17,9 @@ export default function App() {
 
   return (
     <>
-      <input value={input} onChange={handleChangeWithTransition} />
-      {isPending ? 
-        <p>'Loading...'</p> 
-      : 
-        <p>{output.map(o => <span>{o} </span>)}</p>}
-    </>
-  );
+      <h2>Without Transition</h2>
+      <input value={input} onChange={handleChangeWithoutTransition} />
+      
+        <p>{output.map((o,i) => <span key={o+i}> {o} </span>)}</p>
+    </>);
 }
