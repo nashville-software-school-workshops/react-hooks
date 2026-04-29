@@ -1,8 +1,5 @@
 import React, { useState, createContext, use } from 'react';
 
-// Create a context with a default value
-const UserContext = createContext({ username: 'Guest' });
-
 // Simulate a data fetching function that returns a Promise
 function fetchUserData() {
   return new Promise((resolve) => {
@@ -12,18 +9,47 @@ function fetchUserData() {
   });
 }
 
-// Component that uses Context with the use hook
-function UserGreeting() {
-  
-  const { username } = use(UserContext);
-  
+
+// Create a context with a default value
+const UserContext = createContext();
+
+function UserContextProvider({ children }) {
+  const [username, setUsername] = useState('Alice');
+
   return (
-    <div className="greeting-container">
-      <h2>Example 1: Using Context</h2>
-      <p>Hello, {username}!</p>
-    </div>
+    <UserContext.Provider value={{ username, setUsername }}>
+      {children}
+    </UserContext.Provider>
   );
 }
+
+function SuspenseFallback() {
+  return (
+    <div className="profile-container">Loading user data...</div>
+  );
+}
+
+// Component that uses Context with the use hook
+function UserGreeting() {
+
+  const { username, setUsername } = use(UserContext);
+  
+  return (
+    <>
+      <section className="input-container">
+        <label>Change username:</label>
+        <input value={username} onChange={(e) => { setUsername(e.target.value) }} />
+      </section>
+
+      <div className="greeting-container">
+        <h2>Example 1: Using Context</h2>
+        <p>Hello, {username}!</p>
+      </div>
+    </>
+  );
+}
+
+
 
 // Component that uses a Promise with the use hook
 function UserProfile({ userPromise }) {
@@ -39,38 +65,24 @@ function UserProfile({ userPromise }) {
   );
 }
 
-function SuspenseFallback() {
-  return (
-    <div className="profile-container">Loading user data...</div>
-  );
-}
-
-
 export default function App() {
 
-  const [username, setUsername] = useState('Alice');
-  
   //this re-runs on render, which re-triggers the load state
   const userPromise = fetchUserData();
 
   return (
-    <UserContext.Provider value={{ username }}>
+    <UserContextProvider>
       <div className="app-container">
         <h1>React use Hook Example</h1>
-        
-          <section className="input-container">
-            <label>Change username:</label>
-            <input value={username} onChange={(e) => { setUsername(e.target.value) }} />
-          </section>
-          
+
           <UserGreeting />
-          
+
           {/* Suspense handles the loading state while the Promise resolves */}
           <React.Suspense fallback={<SuspenseFallback/>}>
             <UserProfile userPromise={userPromise} />
           </React.Suspense>
 
       </div>
-    </UserContext.Provider>
+    </UserContextProvider>
   );
 }
