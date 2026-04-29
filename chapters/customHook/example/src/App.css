@@ -1,0 +1,135 @@
+/* Base styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+}
+
+/* App container */
+.app-container {
+  min-height: 100vh;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.app-container.light {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.app-container.dark {
+  background-color: #333;
+  color: #f5f5f5;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 480px;
+  transition: background-color 0.3s;
+}
+
+.header.light {
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.header.dark {
+  background-color: #444;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Card */
+.card {
+  padding: 40px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 480px;
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.card.light {
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.card.dark {
+  background-color: #444;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Toggle section */
+.toggle-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.message {
+  padding: 12px 16px;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.light .message {
+  background-color: #f9f9f9;
+  border: 1px solid #eee;
+}
+
+.dark .message {
+  background-color: #555;
+  border: 1px solid #666;
+}
+
+/* Buttons */
+button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+.btn-primary {
+  background-color: #4a90e2;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: #357abd;
+}
+
+.theme-toggle.light {
+  background-color: #333;
+  color: #fff;
+}
+
+.theme-toggle.dark {
+  background-color: #f5f5f5;
+  color: #333;
+}
