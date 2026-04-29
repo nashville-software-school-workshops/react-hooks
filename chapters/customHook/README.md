@@ -26,3 +26,12 @@ In this example, `useToggle` wraps `useState` to manage a boolean value. It retu
 *   **Reusing stateful logic:** When two or more components share the same state + handler pattern, extract it into a custom hook.
 *   **Simplifying complex components:** Move logic out of the component body so the JSX stays focused on rendering.
 *   **Encapsulating side effects:** Wrap `useEffect` logic (data fetching, subscriptions, timers) in a hook so components don't need to know the details.
+
+## Beyond the Basics
+
+Custom hooks are useful even when logic isn't shared across multiple components. Some other patterns you'll encounter in real codebases:
+
+*   **Bridging external systems:** Hooks are the standard way to connect non-React things — browser APIs, WebSockets, local storage, third-party SDKs — into the React lifecycle. Rather than extracting existing logic, you're adapting an outside API to work with React's model.
+*   **Composing hooks together:** A custom hook can call other custom hooks, building up behavior in layers. A `usePaginatedSearch` hook might internally call a `useFetch` hook, a `useDebounce` hook, and a `useLocalStorage` hook, combining them into a single clean interface.
+*   **Separating what from how:** A component can stay focused purely on rendering — `const { data, isLoading } = useUserProfile(id)` — without knowing anything about fetching, caching, or retries. The hook owns those decisions. This is about keeping components readable, not about reuse.
+*   **Hiding implementation details:** Because the component only sees what the hook returns, you can change the internals — swap a plain `fetch` for a caching library, change how errors are handled — without touching any of the components that use the hook.
