@@ -1,14 +1,106 @@
-#root {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100vw;
-    height: 100vh;
-    text-align: center;
+/* Base styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: #f5f5f5;
+}
+
+/* Header */
+.header {
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.header h1 {
+  font-size: 1.8rem;
+  color: #333;
+}
+
+/* Card */
+.card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 40px 60px;
+  text-align: center;
+  min-width: 300px;
+}
+
+/* Count display */
+.count-display {
+  font-size: 5rem;
+  font-weight: bold;
+  color: #4a90e2;
+  margin-bottom: 32px;
+  line-height: 1;
+}
+
+/* Button group */
+.button-group {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+/* Buttons */
 button {
-    margin: 0 8px;
-    font-size: 1.2rem;
-    padding: 4px 12px;
+  padding: 10px 24px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+.btn-primary {
+  background-color: #4a90e2;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: #357abd;
+}
+
+.btn-secondary {
+  background-color: #e25050;
+  color: #fff;
+}
+
+.btn-secondary:hover {
+  background-color: #c03030;
+}
+
+.btn-neutral {
+  background-color: #888;
+  color: #fff;
+}
+
+.btn-neutral:hover {
+  background-color: #666;
 }
