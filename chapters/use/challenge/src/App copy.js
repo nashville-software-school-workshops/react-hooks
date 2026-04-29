@@ -44,7 +44,6 @@ function fetchUserPosts(userId) {
 const ThemeContext = createContext();
 
 function ThemeContextProvider({ children }) {
-  
   const [theme, setTheme] = useState({ color: 'light' });
 
   const toggleTheme = () => {
@@ -61,9 +60,7 @@ function ThemeContextProvider({ children }) {
 
 ///////// Child components that employ the use hook for context and a promise
 function Header() {
-  // TODO: with use hook, instead get the current theme and toggle function from the context
-  const theme = {color:'light'}; // Replace with context usage
-  const toggleTheme = () => {}; // Replace with context usage
+  const { theme, toggleTheme } = use(ThemeContext);
 
   return (
     <header className={`header ${theme.color}`}>
@@ -79,11 +76,8 @@ function Header() {
 }
 
 function UserProfile({ userPromise }) {
-  // TODO: With the use hook, get the current theme from context
-  const theme = {color:'light'}; // Replace with context usage
-  
-  // TODO: Use the userPromise with the use hook to get the user data, instead of this hardcoded data
-  const userData = { name: 'Loading...', email: 'loading@example.com' };
+  const { theme } = use(ThemeContext);
+  const userData = use(userPromise);
 
   return (
     <div className={`profile-container ${theme.color}`}>
@@ -97,13 +91,8 @@ function UserProfile({ userPromise }) {
 }
 
 function PostList({ postsPromise }) {
-  // TODO: with use hook, get the current theme from that context
-  const theme = {color:'light'}; // Replace with context usage
-  
-  // TODO: use the use hook and postsPromise then fetch and display posts, instead of this placeholder data
-  const posts = [
-    { id: 1, title: 'Loading...', content: 'Loading post content...' }
-  ];
+  const { theme } = use(ThemeContext);
+  const posts = use(postsPromise);
 
   return (
     <div className={`posts-container ${theme.color}`}>

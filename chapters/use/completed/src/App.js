@@ -1,10 +1,8 @@
 import React, { useState, createContext, Suspense, use } from 'react';
 import './App.css';
 
-// Create a theme context
-const ThemeContext = createContext('light');
 
-// Simulate a data fetching function that returns a Promise for user data
+////////// Simulate a data fetching functions that returns a Promise for each
 function fetchUserData() {
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -17,7 +15,6 @@ function fetchUserData() {
   });
 }
 
-// Simulate a data fetching function that returns a Promise for user posts
 function fetchUserPosts(userId) {
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -42,34 +39,48 @@ function fetchUserPosts(userId) {
   });
 }
 
-// Header component with theme toggle
-function Header() {
-  // Use the theme context with the use hook
-  const { theme, toggleTheme } = use(ThemeContext);
-  
+
+/////// Create a theme context and provider
+const ThemeContext = createContext();
+
+function ThemeContextProvider({ children }) {
+  const [theme, setTheme] = useState({ color: 'light' });
+
+  const toggleTheme = () => {
+    setTheme(prevTheme => ({ color: prevTheme.color === 'light' ? 'dark' : 'light' }));
+  };
+
   return (
-    <header className={`header ${theme}`}>
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+}
+
+
+///////// Child components that employ the use hook for context and a promise
+function Header() {
+  const { theme, toggleTheme } = use(ThemeContext);
+
+  return (
+    <header className={`header ${theme.color}`}>
       <h1>use Hook Challenge</h1>
-      <button 
+      <button
         onClick={toggleTheme}
-        className={`theme-toggle ${theme}`}
+        className={`theme-toggle ${theme.color}`}
       >
-        Switch to {theme === 'light' ? 'dark' : 'light'} mode
+        Switch to {theme.color === 'light' ? 'dark' : 'light'} mode
       </button>
     </header>
   );
 }
 
-// User Profile component that uses the theme context and user data
 function UserProfile({ userPromise }) {
-  // Use the theme context with the use hook
   const { theme } = use(ThemeContext);
-  
-  // Use the userPromise with the use hook
   const userData = use(userPromise);
-  
+
   return (
-    <div className={`profile-container ${theme}`}>
+    <div className={`profile-container ${theme.color}`}>
       <h2>User Profile</h2>
       <div className="profile-info">
         <p><strong>Name:</strong> {userData.name}</p>
@@ -79,15 +90,12 @@ function UserProfile({ userPromise }) {
   );
 }
 
-// Post List component that uses the posts promise
 function PostList({ postsPromise }) {
-  // Use the theme context with the use hook
   const { theme } = use(ThemeContext);
-
   const posts = use(postsPromise);
 
   return (
-    <div className={`posts-container ${theme}`}>
+    <div className={`posts-container ${theme.color}`}>
       <h2>User Posts</h2>
       <div className="posts-list">
         {posts.map(post => (
@@ -101,37 +109,26 @@ function PostList({ postsPromise }) {
   );
 }
 
+//fetch data and create promises for the App to pass to children
 const userPromise = fetchUserData();
 const postsPromise = userPromise.then(userData => fetchUserPosts(userData.id));
 
 export default function App() {
-  const [theme, setTheme] = useState('light');
-
-  const toggleTheme = () => {
-    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
-  };
-  
-  // Create the theme context value
-  const themeValue = {
-    theme,
-    toggleTheme
-  };
-  
   return (
-    <ThemeContext.Provider value={themeValue}>
-      <div className={`app-container ${theme}`}>
+    <ThemeContextProvider>
+      <div className={`app-container`}>
         <Header />
-        
+
         <div className="content-container">
           <Suspense fallback={<div className="loading">Loading user data...</div>}>
             <UserProfile userPromise={userPromise} />
           </Suspense>
-          
+
           <Suspense fallback={<div className="loading">Loading posts...</div>}>
             <PostList postsPromise={postsPromise} />
           </Suspense>
         </div>
       </div>
-    </ThemeContext.Provider>
+    </ThemeContextProvider>
   );
 }
