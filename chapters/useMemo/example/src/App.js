@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 
 export default function App() {
   const [input, setInput] = useState(0);
@@ -27,7 +27,7 @@ export default function App() {
     return output
   }
 
-  const expensiveValue = doCalculation();
+  const expensiveValue = useMemo( doCalculation, [input]);
 
   return (
     <div>
