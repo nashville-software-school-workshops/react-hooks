@@ -1,24 +1,54 @@
 import './App.css';
-import useCounter from './useCounter';
+import ErrorBoundary from './ErrorBoundary';
+import ErrorFallback from './ErrorFallback';
 
-function App() {
-  const { count, increment, decrement, reset } = useCounter(0);
 
+
+
+// Component that throws an error
+function BrokenComponent() {
+  throw new Error('This component has an error!');
+}
+
+// Component that works fine
+function WorkingComponent() {
   return (
-    <div className="app-container">
-      <div className="header">
-        <h1>Custom Hook Counter</h1>
-      </div>
-      <div className="card">
-        <div className="count-display">{count}</div>
-        <div className="button-group">
-          <button className="btn-secondary" onClick={decrement}>−</button>
-          <button className="btn-neutral" onClick={reset}>Reset</button>
-          <button className="btn-primary" onClick={increment}>+</button>
-        </div>
-      </div>
+    <div className="component-box">
+      <h3>Working Component</h3>
+      <p>This component renders without errors.</p>
     </div>
   );
 }
 
-export default App;
+
+
+export default function App() {
+  return (
+    <ErrorBoundary fallback={<ErrorFallback/>}>
+      <div className="app">
+
+        <h1>Error Boundary Example</h1>
+
+        <div className="section">
+          <h2>Working Component (No Error Boundary)</h2>
+          <WorkingComponent />
+        </div>
+
+        <div className="section">
+          <h2>Broken Component (With Error Boundary)</h2>
+          <ErrorBoundary fallback={<ErrorFallback />}>
+            <BrokenComponent />
+          </ErrorBoundary>
+        </div>
+
+        <div className="section">
+          <ErrorBoundary fallback={<ErrorFallback />}>
+            <h2>Another Working Component</h2>
+            <WorkingComponent />
+          </ErrorBoundary>
+        </div>
+
+      </div>
+    </ErrorBoundary>
+  );
+}

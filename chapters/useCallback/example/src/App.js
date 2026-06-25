@@ -1,7 +1,7 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState, memo } from 'react';
 
 // Child component wrapped with React.memo
-const Button = React.memo(function Button({ onClick, label }) {
+const Button = memo(function Button({ onClick, label }) {
   console.log(`${label} button rendered`);
   return (
     <button onClick={onClick}>
@@ -15,9 +15,9 @@ export default function App() {
   const [otherState, setOtherState] = useState(0);
 
   // Memoize the increment function with useCallback
-  const increment = useCallback(() => {
+  const increment = () => {
     setCount(c => c + 1);
-  }, []); // The function never changes because it has no dependencies
+  }; // The function never changes because it has no dependencies
 
   // This function will be recreated on every render
   const updateOtherState = () => {
